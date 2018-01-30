@@ -13,6 +13,7 @@
 		8498BE1C20106964004090AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8498BE1A20106964004090AA /* Main.storyboard */; };
 		8498BE1E20106964004090AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8498BE1D20106964004090AA /* Assets.xcassets */; };
 		8498BE2120106964004090AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8498BE1F20106964004090AA /* LaunchScreen.storyboard */; };
+		84EFBF5D201C4F3600B83CD9 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EFBF5C201C4F3600B83CD9 /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		8498BE1D20106964004090AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8498BE2020106964004090AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8498BE2220106964004090AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84EFBF5C201C4F3600B83CD9 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				8498BE1820106964004090AA /* TodolistViewController.swift */,
+				84EFBF5C201C4F3600B83CD9 /* CategoryViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EFBF5D201C4F3600B83CD9 /* CategoryViewController.swift in Sources */,
 				8498BE1920106964004090AA /* TodolistViewController.swift in Sources */,
 				8481793C20178B0D00F7BEC2 /* DataModel.xcdatamodeld in Sources */,
 				8498BE1720106964004090AA /* AppDelegate.swift in Sources */,
