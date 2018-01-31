@@ -58,6 +58,7 @@ class TodolistViewController: UITableViewController {
         do {
             try realm.write {
                 item.done = !item.done
+               // realm.delete(item)
             }
         }
             catch {
@@ -83,6 +84,7 @@ class TodolistViewController: UITableViewController {
                     let newItem = Item()
                     newItem.title = textField.text!
                     newItem.done = false
+                    newItem.dateCreated = Date()
                     currentCategory.items.append(newItem)
                 }
                 } catch {
@@ -124,29 +126,24 @@ class TodolistViewController: UITableViewController {
         
         tableView.reloadData()
     }
-
+}
 //}
 //MARK: - Search bar methods
-//extension TodolistViewController : UISearchBarDelegate {
-//    
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        let request : NSFetchRequest<Item> = Item.fetchRequest()
-//        
-//        let predicate = NSPredicate(format: "title CONTAINS[CD] %@", searchBar.text!)
-//        
-//        
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//        
-//        loadItem(with: request, predicate: predicate)
-//        
-//    }
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchBar.text?.count == 0 {
-//            loadItem()
-//            DispatchQueue.main.async {                  // show the keyboard when we click in or dismiss
-//                searchBar.resignFirstResponder()
-//            }
-//            
-//        }
-//    }
+extension TodolistViewController : UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
+        
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItem()
+            DispatchQueue.main.async {                  // show the keyboard when we click in or dismiss
+                searchBar.resignFirstResponder()
+            }
+            
+        }
+    }
+    
 }
