@@ -7,10 +7,10 @@
 //
 
 import UIKit
-//import CoreData
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeViewController {
 
     let realm = try! Realm()
     
@@ -27,6 +27,8 @@ class CategoryViewController: UITableViewController {
         
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         loadCategory()
+        tableView.rowHeight = 80
+        tableView.separatorStyle = .none
     }
 
     
@@ -37,19 +39,32 @@ class CategoryViewController: UITableViewController {
         return categories?.count ?? 1
     }
     
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
+//        cell.delegate = self
+//        return cell
+//    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // let cell = UITableViewCell(style: .default, reuseIdentifier: "ToDoItemCell")
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-    //    cell.textLabel?.text = categoryArray[indexPath.row].name
+        if let category = categories?[indexPath.row] {
         
-        let category = categories?[indexPath.row]
-        cell.textLabel?.text = category?.name ?? " no category added yet"
+        cell.textLabel?.text = category.name // ?? " no category added yet"
         
-       // cell.accessoryType = category.done ? .checkmark : .none
+      //  let color = categories?[indexPath.row].colour
+        
+        cell.backgroundColor = UIColor(hexString: category.colour )// ?? "1D9BF6" )
+        cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+        }
+        
+       // cell.delegate = self
+        
+        // cell.accessoryType = category.done ? .checkmark : .none
         
         return cell
+    
     }
     
     
@@ -59,7 +74,8 @@ class CategoryViewController: UITableViewController {
         
         performSegue(withIdentifier: "Segue", sender: self)
  
-        tableView.deselectRow(at: indexPath, animated: true)
+       // tableView.deselectRow(at: indexPath, animated: true)
+        print("indexPath la \(indexPath)")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -67,6 +83,7 @@ class CategoryViewController: UITableViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categories?[indexPath.row]
+            print("indexPath.row o ham prepare for segue \(indexPath.row)")
         }
     }
     
@@ -85,6 +102,7 @@ class CategoryViewController: UITableViewController {
             let newCategory = Category()
             
             newCategory.name = textField.text!
+            newCategory.colour = UIColor.randomFlat.hexValue()
             
             
       //      self.categories.append(newCategory)
@@ -120,7 +138,7 @@ class CategoryViewController: UITableViewController {
             print("error saving category \(error)")
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     func loadCategory()
@@ -129,6 +147,23 @@ class CategoryViewController: UITableViewController {
 
         tableView.reloadData()
     }
+    //MARK: - Delete data from swipe
     
+    override func updateMode(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categories?[indexPath.row] {
+
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("error delete category \(error)")
+            }
+            //  tableView.reloadData()
+        }
+    }
     
 }
+
+//MARK: - Swipe Cell Delegate Methods
+
