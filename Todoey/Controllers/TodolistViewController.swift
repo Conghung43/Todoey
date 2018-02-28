@@ -12,6 +12,7 @@ import ChameleonFramework
 
 class TodolistViewController: SwipeViewController {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     var todoItems : Results<Item>?
     let realm = try! Realm()
     
@@ -23,28 +24,61 @@ class TodolistViewController: SwipeViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("vi tri can xem viewdidload")
+        
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
        //loadItem()
         tableView.rowHeight = 80
+        tableView.separatorStyle = .none
+        
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError(" Navigation control does not exist ")
+        }
+        guard let colourHex = selectedCategory?.colour else { fatalError()}
+            
+            title = selectedCategory?.name
+            
+        
+        guard let navBarColour = UIColor(hexString: colourHex) else { fatalError() }
+            
+            navBar.barTintColor = navBarColour
+            
+            navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : ContrastColorOf(navBarColour, returnFlat: true )]
+            
+            navBar.tintColor = ContrastColorOf(navBarColour, returnFlat: true)
+            
+            searchBar.barTintColor = UIColor(hexString: colourHex)
+        
+        
+    }
+ 
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let originalColour = UIColor(hexString: "1D9BF6") else { fatalError()}
+        navigationController?.navigationBar.barTintColor = originalColour
+        
+        navigationController?.navigationBar.tintColor = FlatWhite()
+        
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: FlatWhite()]
+        
+    }
+    
     //MARK - Tableview Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("vi tri can xem numberofrow ")
+
         return todoItems?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("vi tri can xem cellforrow \(indexPath)")
+    
        let cell = super.tableView(tableView, cellForRowAt: indexPath)
        
       //  cell.textLabel?.text = todoItems?[indexPath.row].title
         
         if let item = todoItems?[indexPath.row] {
-           // print("vi tri can xem \(item)")
-           // print("vi tri can xem \(indexPath.row)")
+
             cell.textLabel?.text = item.title
             
             if let color = UIColor(hexString: selectedCategory!.colour)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat((todoItems?.count)!)) {
@@ -123,13 +157,13 @@ class TodolistViewController: SwipeViewController {
     func loadItem()
     {
          todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)            //realm.objects(Item.self)
-        //print("trong loadItem - todolist")
+
         tableView.reloadData()
         
     }
     override func updateMode(at indexPath: IndexPath) {
         if let todoItemsForDeletion = self.todoItems?[indexPath.row] {
-            print("vi tri can xem updatemode \(indexPath)")
+
             do {
                 try self.realm.write {
                     self.realm.delete(todoItemsForDeletion)
@@ -153,7 +187,7 @@ extension TodolistViewController : UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0 {
             loadItem()
-            DispatchQueue.main.async {                  // show the keyboard when we click in or dismiss
+            DispatchQueue.main.async {                  // show the keyboard when click or dismiss
                 searchBar.resignFirstResponder()
             }
             

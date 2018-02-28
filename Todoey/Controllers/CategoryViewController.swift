@@ -59,10 +59,6 @@ class CategoryViewController: SwipeViewController {
         cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
         }
         
-       // cell.delegate = self
-        
-        // cell.accessoryType = category.done ? .checkmark : .none
-        
         return cell
     
     }
@@ -75,7 +71,7 @@ class CategoryViewController: SwipeViewController {
         performSegue(withIdentifier: "Segue", sender: self)
  
        // tableView.deselectRow(at: indexPath, animated: true)
-        print("indexPath la \(indexPath)")
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -83,7 +79,7 @@ class CategoryViewController: SwipeViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categories?[indexPath.row]
-            print("indexPath.row o ham prepare for segue \(indexPath.row)")
+            
         }
     }
     
@@ -95,7 +91,7 @@ class CategoryViewController: SwipeViewController {
         
         let alert = UIAlertController(title: "Add New Category", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
-            // What will happen once the user clicks the Add Item
+            // User clicks Add Item
             
             // let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             
@@ -121,13 +117,8 @@ class CategoryViewController: SwipeViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
         
-        
-        
     }
-        
-    
-    
-    
+  
     func save(category : Category) {
         
         do {
