@@ -97,7 +97,7 @@ class TodolistViewController: SwipeViewController {
     //MARK - Tableview delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("vi tri can xem didselecrow \(indexPath)")
+        
         if let item = todoItems?[indexPath.row] {
         do {
             try realm.write {
@@ -131,7 +131,7 @@ class TodolistViewController: SwipeViewController {
                     newItem.dateCreated = Date()
                     //newItem.colour = UIColor.randomFlat.hexValue()
                     currentCategory.items.append(newItem)
-                        print("add xong ")
+                    
                 }
                 } catch {
                  print("error saving category \(error)")
